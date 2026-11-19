@@ -1,0 +1,70 @@
+#include <stdio.h>
+
+#define D 38
+#define M 12
+
+int main()
+{
+    float rain[D][M];
+    float total, monthly[M] = {0};
+    float stateTotal = 0, max = 0;
+    int maxD = 0, maxM = 0;
+
+    printf("Enter rainfall for 38 districts and 12 months:\n");
+
+    for (int i = 0; i < D; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            scanf("%f", &rain[i][j]);
+
+            monthly[j] += rain[i][j];
+            stateTotal += rain[i][j];
+
+            if (rain[i][j] > max)
+            {
+                max = rain[i][j];
+                maxD = i;
+                maxM = j;
+            }
+        }
+    }
+
+    printf("\nAnnual rainfall of each district:\n");
+
+    for (int i = 0; i < D; i++)
+    {
+        total = 0;
+
+        for (int j = 0; j < M; j++)
+            total += rain[i][j];
+
+        printf("District %d: %.2f\n", i + 1, total);
+    }
+
+    printf("\nMonthly averages:\n");
+
+    for (int j = 0; j < M; j++)
+        printf("Month %d: %.2f\n", j + 1, monthly[j] / D);
+
+    printf("\nWettest district: %d\n", maxD + 1);
+    printf("Wettest month: %d\n", maxM + 1);
+    printf("Maximum rainfall: %.2f\n", max);
+
+    printf("\nDistricts below 60%% of state average:\n");
+
+    float average = stateTotal / (D * M);
+
+    for (int i = 0; i < D; i++)
+    {
+        total = 0;
+
+        for (int j = 0; j < M; j++)
+            total += rain[i][j];
+
+        if (total / M < 0.6 * average)
+            printf("District %d\n", i + 1);
+    }
+
+    return 0;
+}
